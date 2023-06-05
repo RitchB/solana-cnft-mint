@@ -69,7 +69,6 @@ async function post(
   ) {
     // Account provided in the transaction request body by the wallet.
     let accountField = req.body?.account;
-    if(process.env.DEBUGGING) {accountField = new Keypair().publicKey.toBase58()}
     if (!accountField) throw new Error('missing account');
     
     console.log("mint reqest by "+accountField);
@@ -92,23 +91,12 @@ async function post(
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<GetData|PostData|ErrorData>
+  res: NextApiResponse<GetData | PostData>
 ) {
-  const { cnfttag } = req.query;
-  const info = getCNFTInfo(cnfttag as string);
-  if(!info){
-    res.status(404).send({error: "cnft tag not found"});
-    return;
-  }
-  if(req.method == "GET"){
-    console.log("received GET request for "+cnfttag);
-    if(process.env.DEBUGGING){
-      return await post(req, res,info);
-    }
+  if (req.method == "GET") {
     return get(req, res);
-  } else if(req.method == "POST"){
-    console.log("received POST request for "+cnfttag);
-    return await post(req, res,info);
+  } else if (req.method == "POST") {
+    return await post(req, res);
   }
 }
 
@@ -121,22 +109,6 @@ function getDefaultPriceForCollection(collection: PublicKey){
 
 
 async function createTransaction(user: PublicKey, cnftInfo: CnftInfo): Promise<[Transaction, string]> {
-
-  if(cnftInfo.disabled){
-    const message = "mint disabled! donate to rb";
-    console.log("mint disabled for "+cnftInfo.name);
-    return [createDonationTransaction(user), message];
-  }
-  
-  if(cnftInfo.releaseDate){
-    const now = new Date();
-    const release = new Date(cnftInfo.releaseDate)
-    if(now<release){
-      const message = "mint not released yet! but you can donate ;)";
-      console.log("mint not released for "+cnftInfo.name);
-      return [createDonationTransaction(user), message];
-    }
-  }
 
   const messageApx = applyURIchanges(cnftInfo);
 
@@ -276,15 +248,3 @@ async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: 
   return ix;
 }
 
-function createDonationTransaction(user: PublicKey){
-  const ix = SystemProgram.transfer({
-    fromPubkey: user,
-    toPubkey: new PublicKey('E8aGNJNdoexXAfKTLyvt4HSfpZ1YgeGAgpnQhcXPSGpD),
-    lamports: 0
-  });
-  const tx = new Transaction();
-  tx.add(ix);
-  tx.feePayer = user;
-  tx.recentBlockhash = SystemProgram.programId.toBase58();//anything
-  return tx;
-}
