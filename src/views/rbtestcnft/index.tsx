@@ -9,7 +9,7 @@ import { createQR } from "@solana/pay";
 
 
 //const SOLANA_PAY_URL = "solana:https://solanapay-poaqr.vercel.app/api/mint/rbtestcnft";
-const SOLANA_PAY_URL = "solana:http://localhost:3000/rbtestcnft"
+const SOLANA_PAY_URL = "solana:https://solana-cnft-mint-kk7ekrdxl-ritchb.vercel.app/api/mint/rbtestcnft"
 
 export const RbtestcnftView: FC = ({ }) => {
 
