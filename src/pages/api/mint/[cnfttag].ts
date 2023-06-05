@@ -89,14 +89,27 @@ async function post(
 
 }
 
+const DEBUGGING = true
+
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<GetData | PostData>
+  res: NextApiResponse<GetData|PostData|ErrorData>
 ) {
-  if (req.method == "GET") {
-    return get(req, res, info);
-  } else if (req.method == "POST") {
-    return await post(req, res, info);
+  const { cnfttag } = req.query;
+  const info = getCNFTInfo(cnfttag as string);
+  if(!info){
+    res.status(404).send({error: "cnft tag not found"});
+    return;
+  }
+  if(req.method == "GET"){
+    console.log("received GET request for "+cnfttag);
+    if(DEBUGGING){
+      return await post(req, res,info);
+    }
+    return get(req, res);
+  } else if(req.method == "POST"){
+    console.log("received POST request for "+cnfttag);
+    return await post(req, res,info);
   }
 }
 
