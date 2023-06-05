@@ -94,9 +94,9 @@ export default async function handler(
   res: NextApiResponse<GetData | PostData>
 ) {
   if (req.method == "GET") {
-    return get(req, res);
+    return get(req, res, info);
   } else if (req.method == "POST") {
-    return await post(req, res);
+    return await post(req, res, info);
   }
 }
 
