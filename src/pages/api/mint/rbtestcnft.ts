@@ -12,14 +12,6 @@ import { type } from 'os';
 export const YT_COLLECTION = "3XfkDtSZZ586DztsjeVpTV3TLMYHRci2tkwTBoGzFvfz";
 export const YT_COLLECTION_PRICE = 0
 
-export type CnftInfo = {
-    name: string,
-    symbol?: string,
-    collection?: string, //pubkey
-    uri: string,
-    tree?: string, //pubkey
-}
-
 const name = "Les castors"
 const collection = "3XfkDtSZZ586DztsjeVpTV3TLMYHRci2tkwTBoGzFvfz"
 const uri = "https://shdw-drive.genesysgo.net/BBayKe9v2acgiM6LpEio9dA1nxHHg2S6UsYrZuTVxZZL/cNFTrb_metadata.json"
@@ -51,7 +43,7 @@ function get(
 
 async function post(
     req: NextApiRequest,
-    res: NextApiResponse<PostData>, cnftInfo: CnftInfo
+    res: NextApiResponse<PostData>,
 ) {
     // Account provided in the transaction request body by the wallet.
     let accountField = req.body?.account;
@@ -61,7 +53,7 @@ async function post(
 
     const user = new PublicKey(accountField);
 
-    const [transaction, message] = await createTransaction(user, cnftInfo);
+    const [transaction, message] = await createTransaction(user);
 
     // Serialize and return the unsigned transaction.
     const serializedTransaction = transaction.serialize({
@@ -75,27 +67,22 @@ async function post(
 
 }
 
-const DEBUGGING = true
+const DEBUGGING = false
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<GetData | PostData | ErrorData>
 ) {
     const { cnfttag } = req.query;
-    const info = getCNFTInfo(cnfttag as string);
-    if (!info) {
-        res.status(404).send({ error: "cnft tag not found bitch" });
-        return;
-    }
     if (req.method == "GET") {
         console.log("received GET request for " + cnfttag);
-        if (DEBUGGING) {
-            return await post(req, res, info);
+        if (!DEBUGGING) {
+            return await post(req, res);
         }
         return get(req, res);
     } else if (req.method == "POST") {
         console.log("received POST request for " + cnfttag);
-        return await post(req, res, info);
+        return await post(req, res);
     }
 }
 
@@ -107,7 +94,7 @@ function getDefaultPriceForCollection(collection: PublicKey) {
 }
 
 
-async function createTransaction(user: PublicKey, cnftInfo: CnftInfo): Promise<[Transaction, string]> {
+async function createTransaction(user: PublicKey): Promise<[Transaction, string]> {
 
 
     const authority = Keypair.fromSecretKey(
@@ -116,12 +103,12 @@ async function createTransaction(user: PublicKey, cnftInfo: CnftInfo): Promise<[
 
     const tree = new PublicKey("ERkzt2Zyau5nnSf877FCQNzQRRxW5xaMJEt4DQhYX97T");
 
-    const collectionMint = new PublicKey(cnftInfo.collection || YT_COLLECTION);
+    const collectionMint = new PublicKey(YT_COLLECTION);
 
     const price = getDefaultPriceForCollection(collectionMint) * LAMPORTS_PER_SOL;
 
     // Build Transaction
-    const ix = await createMintCNFTInstruction(tree, collectionMint, user, authority.publicKey, cnftInfo);
+    const ix = await createMintCNFTInstruction(tree, collectionMint, user, authority.publicKey);
 
     let transaction = new Transaction();
     transaction.add(ix);
@@ -142,7 +129,7 @@ async function createTransaction(user: PublicKey, cnftInfo: CnftInfo): Promise<[
     return [transaction, message];
 
 
-    async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: PublicKey, user: PublicKey, authority: PublicKey, cnftInfo: CnftInfo) {
+    async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: PublicKey, user: PublicKey, authority: PublicKey) {
 
         const [treeAuthority, _bump] = PublicKey.findProgramAddressSync(
             [merkleTree.toBuffer()],
@@ -192,10 +179,10 @@ async function createTransaction(user: PublicKey, cnftInfo: CnftInfo): Promise<[
                 collection: { key: collectionMint, verified: false },
                 creators: [],
                 isMutable: true,
-                name: cnftInfo.name,
+                name: "Les castors",
                 primarySaleHappened: true,
                 sellerFeeBasisPoints: 0,
-                symbol: cnftInfo.symbol || "CAS",
+                symbol: "CAS",
                 uri: "https://shdw-drive.genesysgo.net/BBayKe9v2acgiM6LpEio9dA1nxHHg2S6UsYrZuTVxZZL/cNFTrb_metadata.json",
                 uses: null,
                 tokenStandard: TokenStandard.NonFungible,
