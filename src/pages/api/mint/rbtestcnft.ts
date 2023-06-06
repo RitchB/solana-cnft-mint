@@ -19,15 +19,10 @@ export type CnftInfo = {
     uri: string,
     tree?: string, //pubkey
 }
-function getCNFTInfo(cnfttag: string): CnftInfo | null {
-    const infodict = require('../../../data/cnfts.json')
-    if (cnfttag in infodict) {
-        const info = infodict[cnfttag] as CnftInfo;
-        console.log(info)
-        return info;
-    }
-    return null;
-}
+
+const name = "Les castors"
+const collection = "3XfkDtSZZ586DztsjeVpTV3TLMYHRci2tkwTBoGzFvfz"
+const uri = "https://shdw-drive.genesysgo.net/BBayKe9v2acgiM6LpEio9dA1nxHHg2S6UsYrZuTVxZZL/cNFTrb_metadata.json"
 
 type ErrorData = {
     error: string
