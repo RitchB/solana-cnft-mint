@@ -9,13 +9,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import * as base58 from "base-58";
 import { type } from 'os';
 
-export const YT_COLLECTION = "3XfkDtSZZ586DztsjeVpTV3TLMYHRci2tkwTBoGzFvfz";
-export const YT_COLLECTION_PRICE = 0
-
-const name = "Les castors"
-const collection = "3XfkDtSZZ586DztsjeVpTV3TLMYHRci2tkwTBoGzFvfz"
-const uri = "https://shdw-drive.genesysgo.net/BBayKe9v2acgiM6LpEio9dA1nxHHg2S6UsYrZuTVxZZL/cNFTrb_metadata.json"
-
 type ErrorData = {
     error: string
 }
@@ -84,14 +77,6 @@ export default async function handler(
         console.log("received POST request for " + cnfttag);
         return await post(req, res);
     }
-}
-
-function getDefaultPriceForCollection(collection: PublicKey) {
-    if (collection.toBase58() == YT_COLLECTION) {
-        return YT_COLLECTION_PRICE;
-    }
-    return 0;
-}
 
 
 async function createTransaction(user: PublicKey): Promise<[Transaction, string]> {
@@ -103,9 +88,9 @@ async function createTransaction(user: PublicKey): Promise<[Transaction, string]
 
     const tree = new PublicKey("ERkzt2Zyau5nnSf877FCQNzQRRxW5xaMJEt4DQhYX97T");
 
-    const collectionMint = new PublicKey(YT_COLLECTION);
+    const collectionMint = new PublicKey("3XfkDtSZZ586DztsjeVpTV3TLMYHRci2tkwTBoGzFvfz");
 
-    const price = getDefaultPriceForCollection(collectionMint) * LAMPORTS_PER_SOL;
+    const price = 0 * LAMPORTS_PER_SOL;
 
     // Build Transaction
     const ix = await createMintCNFTInstruction(tree, collectionMint, user, authority.publicKey);
