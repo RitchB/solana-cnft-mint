@@ -211,4 +211,4 @@ async function createTransaction(user: PublicKey, cnftInfo: CnftInfo): Promise<[
 
         return ix;
     }
-
+}
