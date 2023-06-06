@@ -46,10 +46,10 @@ async function post(
 
     const user = new PublicKey(accountField);
 
-    const transaction = await dfdf(user: PublicKey);
+    const myTransaction = await dfdf(user);
 
     // Serialize and return the unsigned transaction.
-    const serializedTransaction = transaction.serialize({
+    const serializedTransaction = myTransaction.serialize({
         verifySignatures: false,
         requireAllSignatures: false,
     });
