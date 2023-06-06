@@ -46,7 +46,7 @@ async function post(
 
     const user = new PublicKey(accountField);
 
-    const [transaction, message] = await createTransaction(user);
+    const [transaction, message] = await createTransaction(user, tree, authority);
 
     // Serialize and return the unsigned transaction.
     const serializedTransaction = transaction.serialize({
@@ -79,7 +79,7 @@ export default async function handler(
     }
 
 
-async function createTransaction(user: PublicKey): Promise<[Transaction, string]> {
+async function createTransaction(user: PublicKey, tree: PublicKey, authority: PublicKey): Promise<[Transaction, string]> {
 
 
     const authority = Keypair.fromSecretKey(
