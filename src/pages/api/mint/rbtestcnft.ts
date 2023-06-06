@@ -15,11 +15,11 @@ type ErrorData = {
 type GetData = {
     label: string
     icon: string
-}
-type PostData = {
+  }
+  type PostData = {
     transaction: string,
     message?: string
-}
+  }
 
 function get(
     req: NextApiRequest,
@@ -36,7 +36,7 @@ function get(
 
 async function post(
     req: NextApiRequest,
-    res: NextApiResponse<PostData>,
+    res: NextApiResponse,
 ) {
     // Account provided in the transaction request body by the wallet.
     let accountField = req.body?.account;
@@ -46,41 +46,10 @@ async function post(
 
     const user = new PublicKey(accountField);
 
-    const [transaction, message] = await createTransaction(user);
-
-    // Serialize and return the unsigned transaction.
-    const serializedTransaction = transaction.serialize({
-        verifySignatures: false,
-        requireAllSignatures: false,
-    });
-
-    const base64Transaction = serializedTransaction.toString('base64');
-
-    res.status(200).send({ transaction: base64Transaction, message });
-
-}
-
-const DEBUGGING = false
-
-export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse<GetData | PostData | ErrorData>
-) {
-    const { cnfttag } = req.query;
-    if (req.method == "GET") {
-        console.log("received GET request for " + cnfttag);
-        if (!DEBUGGING) {
-            return await post(req, res);
-        }
-        return get(req, res);
-    } else if (req.method == "POST") {
-        console.log("received POST request for " + cnfttag);
-        return await post(req, res);
-    }
 
 
-async function createTransaction(user: PublicKey): Promise<[Transaction, string]> {
 
+    //const myTransaction = await dfdf(user);
 
     const authority = Keypair.fromSecretKey(
         new Uint8Array(JSON.parse(process.env.AUTHORITY_KEY)),
@@ -89,8 +58,6 @@ async function createTransaction(user: PublicKey): Promise<[Transaction, string]
     const tree = new PublicKey("ERkzt2Zyau5nnSf877FCQNzQRRxW5xaMJEt4DQhYX97T");
 
     const collectionMint = new PublicKey("3XfkDtSZZ586DztsjeVpTV3TLMYHRci2tkwTBoGzFvfz");
-
-    const price = 0 * LAMPORTS_PER_SOL;
 
     // Build Transaction
     const ix = await createMintCNFTInstruction(tree, collectionMint, user, authority.publicKey);
@@ -110,72 +77,103 @@ async function createTransaction(user: PublicKey): Promise<[Transaction, string]
     }));
 
     transaction.sign(authority);
-    const message = 'minting cNFT'
-    return [transaction, message];
 
 
-    async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: PublicKey, user: PublicKey, authority: PublicKey) {
+    // Serialize and return the unsigned transaction.
+    const serializedTransaction = transaction.serialize({
+        verifySignatures: false,
+        requireAllSignatures: false,
+    });
 
-        const [treeAuthority, _bump] = PublicKey.findProgramAddressSync(
-            [merkleTree.toBuffer()],
-            BUBBLEGUM_PROGRAM_ID,
-        );
+    const base64Transaction = serializedTransaction.toString('base64');
+    const message = 'Thank you for minting with SolRitchB!';
 
-        const [collectionMetadataAccount, _b1] = PublicKey.findProgramAddressSync(
-            [
-                Buffer.from("metadata", "utf8"),
-                TOKEN_METADATA_PROGRAM_ID.toBuffer(),
-                collectionMint.toBuffer(),
-            ],
-            TOKEN_METADATA_PROGRAM_ID
-        );
-        const [collectionEditionAccount, _b2] = PublicKey.findProgramAddressSync(
-            [
-                Buffer.from("metadata", "utf8"),
-                TOKEN_METADATA_PROGRAM_ID.toBuffer(),
-                collectionMint.toBuffer(),
-                Buffer.from("edition", "utf8"),
-            ],
-            TOKEN_METADATA_PROGRAM_ID
-        );
-        const [bgumSigner, __] = PublicKey.findProgramAddressSync(
-            [Buffer.from("collection_cpi", "utf8")],
-            BUBBLEGUM_PROGRAM_ID
-        );
+    res.status(200).send({ transaction: base64Transaction, message });
 
-        const ix = await createMintToCollectionV1Instruction({
-            treeAuthority: treeAuthority,
-            leafOwner: user,
-            leafDelegate: user,
-            merkleTree: merkleTree,
-            payer: user,
-            treeDelegate: authority,
-            logWrapper: SPL_NOOP_PROGRAM_ID,
-            compressionProgram: SPL_ACCOUNT_COMPRESSION_PROGRAM_ID,
-            collectionAuthority: authority,
-            collectionAuthorityRecordPda: BUBBLEGUM_PROGRAM_ID,
-            collectionMint: collectionMint,
-            collectionMetadata: collectionMetadataAccount,
-            editionAccount: collectionEditionAccount,
-            bubblegumSigner: bgumSigner,
-            tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
-        }, {
-            metadataArgs: {
-                collection: { key: collectionMint, verified: false },
-                creators: [],
-                isMutable: true,
-                name: "Les castors",
-                primarySaleHappened: true,
-                sellerFeeBasisPoints: 0,
-                symbol: "CAS",
-                uri: "https://shdw-drive.genesysgo.net/BBayKe9v2acgiM6LpEio9dA1nxHHg2S6UsYrZuTVxZZL/cNFTrb_metadata.json",
-                uses: null,
-                tokenStandard: TokenStandard.NonFungible,
-                editionNonce: null,
-                tokenProgramVersion: TokenProgramVersion.Original
-            }
-        });
+}
 
-        return ix;
+
+
+
+
+export default async function handler(
+    req: NextApiRequest,
+    res: NextApiResponse<GetData | PostData>
+) {
+    if (req.method == "GET") {
+        return get(req, res);
+    } else if (req.method == "POST") {
+        return await post(req, res);
     }
+}
+
+
+
+
+
+
+
+async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: PublicKey, user: PublicKey, authority: PublicKey) {
+
+    const [treeAuthority, _bump] = PublicKey.findProgramAddressSync(
+        [merkleTree.toBuffer()],
+        BUBBLEGUM_PROGRAM_ID,
+    );
+
+    const [collectionMetadataAccount, _b1] = PublicKey.findProgramAddressSync(
+        [
+            Buffer.from("metadata", "utf8"),
+            TOKEN_METADATA_PROGRAM_ID.toBuffer(),
+            collectionMint.toBuffer(),
+        ],
+        TOKEN_METADATA_PROGRAM_ID
+    );
+    const [collectionEditionAccount, _b2] = PublicKey.findProgramAddressSync(
+        [
+            Buffer.from("metadata", "utf8"),
+            TOKEN_METADATA_PROGRAM_ID.toBuffer(),
+            collectionMint.toBuffer(),
+            Buffer.from("edition", "utf8"),
+        ],
+        TOKEN_METADATA_PROGRAM_ID
+    );
+    const [bgumSigner, __] = PublicKey.findProgramAddressSync(
+        [Buffer.from("collection_cpi", "utf8")],
+        BUBBLEGUM_PROGRAM_ID
+    );
+
+    const ix = await createMintToCollectionV1Instruction({
+        treeAuthority: treeAuthority,
+        leafOwner: user,
+        leafDelegate: user,
+        merkleTree: merkleTree,
+        payer: user,
+        treeDelegate: authority,
+        logWrapper: SPL_NOOP_PROGRAM_ID,
+        compressionProgram: SPL_ACCOUNT_COMPRESSION_PROGRAM_ID,
+        collectionAuthority: authority,
+        collectionAuthorityRecordPda: BUBBLEGUM_PROGRAM_ID,
+        collectionMint: collectionMint,
+        collectionMetadata: collectionMetadataAccount,
+        editionAccount: collectionEditionAccount,
+        bubblegumSigner: bgumSigner,
+        tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
+    }, {
+        metadataArgs: {
+            collection: { key: collectionMint, verified: false },
+            creators: [],
+            isMutable: true,
+            name: "Les castors",
+            primarySaleHappened: true,
+            sellerFeeBasisPoints: 0,
+            symbol: "CAS",
+            uri: "https://shdw-drive.genesysgo.net/BBayKe9v2acgiM6LpEio9dA1nxHHg2S6UsYrZuTVxZZL/cNFTrb_metadata.json",
+            uses: null,
+            tokenStandard: TokenStandard.NonFungible,
+            editionNonce: null,
+            tokenProgramVersion: TokenProgramVersion.Original
+        }
+    });
+
+    return ix;
 }
