@@ -76,7 +76,7 @@ async function post(
 
 
     // Serialize and return the unsigned transaction.
-    const serializedTransaction = myTransaction.serialize({
+    const serializedTransaction = transaction.serialize({
         verifySignatures: false,
         requireAllSignatures: false,
     });
