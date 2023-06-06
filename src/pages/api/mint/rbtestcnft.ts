@@ -15,7 +15,11 @@ type ErrorData = {
 type GetData = {
     label: string
     icon: string
-}
+  }
+  type PostData = {
+    transaction: string,
+    message?: string
+  }
 
 function get(
     req: NextApiRequest,
