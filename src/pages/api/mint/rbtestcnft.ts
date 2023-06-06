@@ -46,7 +46,7 @@ async function post(
 
     const user = new PublicKey(accountField);
 
-    const [transaction, message] = await createTransaction(user: PublicKey);
+    const transaction = await dfdf(user: PublicKey);
 
     // Serialize and return the unsigned transaction.
     const serializedTransaction = transaction.serialize({
@@ -79,7 +79,7 @@ export default async function handler(
     }
 
 
-    async function createTransaction(user: PublicKey): Promise<[Transaction, string]> {
+    async function dfdf(user: PublicKey): Promise<[Transaction, string]> {
 
         const authority = Keypair.fromSecretKey(
             new Uint8Array(JSON.parse(process.env.AUTHORITY_KEY)),
@@ -109,8 +109,7 @@ export default async function handler(
         }));
 
         transaction.sign(authority);
-        const message = 'minting rb cNFT'
-        return [transaction, message];
+        return transaction
 
 
         async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: PublicKey, user: PublicKey, authority: PublicKey) {
