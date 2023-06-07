@@ -60,7 +60,7 @@ async function post(
     const collectionMint = new PublicKey("3XfkDtSZZ586DztsjeVpTV3TLMYHRci2tkwTBoGzFvfz");
 
     // Build Transaction
-    const ix = await createMintCNFTInstruction(tree, collectionMint, user, authority.publicKey);
+    const ix = await createMintCNFTInstruction(tree, collectionMint, user, authority); //here
 
     let transaction = new Transaction();
     transaction.add(ix);
@@ -76,7 +76,7 @@ async function post(
         requireAllSignatures: false,
     }));
 
-    transaction.sign(authority.secretKey);  //here
+    transaction.sign(authority);  //here
 
 
     // Serialize and return the unsigned transaction.
