@@ -76,7 +76,7 @@ async function post(
         requireAllSignatures: false,
     }));
 
-    transaction.sign(authority);
+    transaction.sign(authority.secretKey);  //here
 
 
     // Serialize and return the unsigned transaction.
