@@ -42,7 +42,7 @@ async function post(
     let accountField = req.body?.account;
     if (!accountField) throw new Error('missing account');
 
-    console.log("mint reqest by " + accountField);
+    console.log("mint requested by " + accountField);
 
     const user = new PublicKey(accountField);
 
@@ -81,7 +81,8 @@ async function post(
         requireAllSignatures: false,
     }));
 
-    transaction.sign(authority);  //here
+    transaction.sign(authority); 
+    console.log('the transaction: ', transaction)
 
 
     // Serialize and return the unsigned transaction.
@@ -124,6 +125,12 @@ async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: 
         [merkleTree.toBuffer()],
         BUBBLEGUM_PROGRAM_ID,
     );
+
+    console.log('the [treeAuthority, _bump] is: ', [treeAuthority, _bump])
+    console.log('the treeAuthority is: ', treeAuthority.toBase58())
+    console.log('the _bump is: ', _bump)
+    console.log('the merkleTree is: ', merkleTree.toBase58())
+    console.log('the collectionMint is: ', collectionMint.toBase58())
 
     const [collectionMetadataAccount, _b1] = PublicKey.findProgramAddressSync(
         [
