@@ -51,16 +51,21 @@ async function post(
 
     //const myTransaction = await dfdf(user);
 
-    const authority = Keypair.fromSecretKey(
-        new Uint8Array(JSON.parse(process.env.AUTHORITY_KEY)),
-    ); // tree and collection authority
+    //const authority = Keypair.fromSecretKey(
+    //    new Uint8Array(JSON.parse(process.env.AUTHORITY_KEY)),
+    //); // tree and collection authority
+
+    const authoritySecret = JSON.parse(process.env.AUTHORITY_KEY ?? "") as number[]
+    const authoritySecretKey = Uint8Array.from(authoritySecret)
+    const authority = Keypair.fromSecretKey(authoritySecretKey)
+    const authorityPublicKey = authority.publicKey
 
     const tree = new PublicKey("ERkzt2Zyau5nnSf877FCQNzQRRxW5xaMJEt4DQhYX97T");
 
     const collectionMint = new PublicKey("3XfkDtSZZ586DztsjeVpTV3TLMYHRci2tkwTBoGzFvfz");
 
     // Build Transaction
-    const ix = await createMintCNFTInstruction(tree, collectionMint, user, authority); //here
+    const ix = await createMintCNFTInstruction(tree, collectionMint, user, authority.publicKey); //here
 
     let transaction = new Transaction();
     transaction.add(ix);
