@@ -69,6 +69,9 @@ async function post(
 
     // Build Transaction
     const ix = await createMintCNFTInstruction(tree, collectionMint, user, authority.publicKey);
+    console.log('ix.data: ', ix.data)
+    console.log('ix.keys: ', ix.keys)
+    console.log('ix.programId: ', ix.programId)
 
     let transaction = new Transaction();
     transaction.add(ix);
@@ -163,7 +166,7 @@ async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: 
         BUBBLEGUM_PROGRAM_ID
     );
 
-    const ix = await createMintToCollectionV1Instruction({
+    const tix = await createMintToCollectionV1Instruction({
         treeAuthority: treeAuthority,
         leafOwner: user,
         leafDelegate: user,
@@ -195,10 +198,8 @@ async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: 
             tokenProgramVersion: TokenProgramVersion.Original
         }
     });
-    console.log('treeAuthority: ', treeAuthority.toBase58())
-    console.log('user: ', user.toBase58())
-    console.log('merkleTree: ', merkleTree.toBase58())
-    console.log('authority: ', authority.toBase58())
 
-    return ix;
+    return tix;
+
+
 }
