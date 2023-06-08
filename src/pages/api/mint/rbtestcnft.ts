@@ -133,7 +133,7 @@ async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: 
     //console.log('the _bump is: ', _bump)    //255
     //console.log('the merkleTree is: ', merkleTree.toBase58())   //ERkzt2Zyau5nnSf877FCQNzQRRxW5xaMJEt4DQhYX97T
     //console.log('the collectionMint is: ', collectionMint.toBase58())   //3XfkDtSZZ586DztsjeVpTV3TLMYHRci2tkwTBoGzFvfz
-    
+
 
     const [collectionMetadataAccount, _b1] = PublicKey.findProgramAddressSync(
         [
@@ -143,10 +143,10 @@ async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: 
         ],
         TOKEN_METADATA_PROGRAM_ID
     );
-    console.log('the collectionMetadataAccount is: ', collectionMetadataAccount.toBase58())   //
-    console.log('the _b1 is: ', _b1)  //
-    console.log('the TOKEN_METADATA_PROGRAM_ID is: ', TOKEN_METADATA_PROGRAM_ID.toBase58())  //metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s???????
-    console.log('the collectionMint.toBuffer(): ', collectionMint.toBuffer())
+    //console.log('the collectionMetadataAccount is: ', collectionMetadataAccount.toBase58())   // G8pq8JmbVTzktGjkfeV7EB8VoU5mRZXt4spCs2PRm4Xg
+    //console.log('the _b1 is: ', _b1)  // 255
+    //console.log('the TOKEN_METADATA_PROGRAM_ID is: ', TOKEN_METADATA_PROGRAM_ID.toBase58())  //metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s
+    //console.log('the collectionMint.toBuffer(): ', collectionMint.toBuffer()) //<Buffer 25 92 ... e9>
 
     const [collectionEditionAccount, _b2] = PublicKey.findProgramAddressSync(
         [
@@ -157,6 +157,7 @@ async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: 
         ],
         TOKEN_METADATA_PROGRAM_ID
     );
+
     const [bgumSigner, __] = PublicKey.findProgramAddressSync(
         [Buffer.from("collection_cpi", "utf8")],
         BUBBLEGUM_PROGRAM_ID
@@ -194,6 +195,10 @@ async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: 
             tokenProgramVersion: TokenProgramVersion.Original
         }
     });
+    console.log('treeAuthority: ', treeAuthority.toBase58())
+    console.log('user: ', user.toBase58())
+    console.log('merkleTree: ', merkleTree.toBase58())
+    console.log('authority: ', authority.toBase58())
 
     return ix;
 }
