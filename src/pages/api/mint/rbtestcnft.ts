@@ -82,7 +82,7 @@ async function post(
     }));
 
     transaction.sign(authority);
-    console.log('the transaction: ', transaction)
+    console.log('the transaction.signature: ', transaction.signatures)
 
 
     // Serialize and return the unsigned transaction.
@@ -126,11 +126,11 @@ async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: 
         BUBBLEGUM_PROGRAM_ID,
     );
 
-    console.log('the [treeAuthority, _bump] is: ', [treeAuthority, _bump])
-    console.log('the treeAuthority is: ', treeAuthority.toBase58())
-    console.log('the _bump is: ', _bump)
-    console.log('the merkleTree is: ', merkleTree.toBase58())
-    console.log('the collectionMint is: ', collectionMint.toBase58())
+    //console.log('the treeAuthority is: ', treeAuthority.toBase58())//BYcDWRYDZsCQeU9Ew82PG5Gnkxkq2b9N8GWeorN5gdeU
+    //console.log('the _bump is: ', _bump)    //255
+    //console.log('the merkleTree is: ', merkleTree.toBase58())   //ERkzt2Zyau5nnSf877FCQNzQRRxW5xaMJEt4DQhYX97T
+    //console.log('the collectionMint is: ', collectionMint.toBase58())   //3XfkDtSZZ586DztsjeVpTV3TLMYHRci2tkwTBoGzFvfz
+    
 
     const [collectionMetadataAccount, _b1] = PublicKey.findProgramAddressSync(
         [
