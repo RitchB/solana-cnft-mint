@@ -69,9 +69,9 @@ async function post(
 
     // Build Transaction
     const ix = await createMintCNFTInstruction(tree, collectionMint, user, authority.publicKey);
-    console.log('ix.data: ', ix.data)
+    //console.log('ix.data: ', ix.data)
     console.log('ix.keys: ', ix.keys)
-    console.log('ix.programId: ', ix.programId)
+    //console.log('ix.programId: ', ix.programId) //PublicKey [PublicKey(BGUMAp9Gq7iTEuizy4pqaxsTyUCBK68MDfK752saRPUY)] {_bn: <BN: 988b80eb79352869b224745f59ddbf8a2658ca13dc68812126351cae07c1a5a5>}
 
     let transaction = new Transaction();
     transaction.add(ix);
