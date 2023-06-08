@@ -197,11 +197,6 @@ async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: 
             editionNonce: null,
             tokenProgramVersion: TokenProgramVersion.Original
         }
-        console.log('treeAuthority: ', ix.())
-        console.log('user: ', user.toBase58())
-        console.log('merkleTree: ', merkleTree.toBase58())
-        console.log('authority: ', authority.toBase58())
-
     });
 
     return tix;
