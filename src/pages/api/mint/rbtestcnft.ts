@@ -43,8 +43,8 @@ async function post(
     console.log("mint requested by " + accountField);
 
     const user = new PublicKey(accountField);
-    console.log('the user is: ', user)
-    console.log('the user is: ', user.toBase58())
+    console.log('the user is: ', user)  //PublicKey [PublicKey(c9Mw4mMdXKnzZFZJdGTC5EJa13Shne2mdRAiDhX5GHK)] {_bn: <BN: 900c8323b95ceaca68b113d54a82fdc893c24648ccf370b7acb9049099cecce>}
+    console.log('the user is: ', user.toBase58())   //c9Mw4mMdXKnzZFZJdGTC5EJa13Shne2mdRAiDhX5GHK
 
 
 
@@ -57,8 +57,11 @@ async function post(
 
     const authoritySecret = JSON.parse(process.env.AUTHORITY_KEY ?? "") as number[]
     const authoritySecretKey = Uint8Array.from(authoritySecret)
-    const authority = Keypair.fromSecretKey(authoritySecretKey)
-    const authorityPublicKey = authority.publicKey
+    const authority = Keypair.fromSecretKey(authoritySecretKey) //
+    const authorityPublicKey = authority.publicKey  // 
+    console.log('the authority is: ', authority)  //
+    console.log('the authority.publicKey is: ', authority.publicKey)  //
+    console.log('the authorityPublicKey is: ', authorityPublicKey.toBase58())  //
 
     const tree = new PublicKey("ERkzt2Zyau5nnSf877FCQNzQRRxW5xaMJEt4DQhYX97T");
 
@@ -73,7 +76,7 @@ async function post(
     const connection = new Connection('https://api.devnet.solana.com')
     const bh = await connection.getLatestBlockhash();
     transaction.recentBlockhash = bh.blockhash;
-    transaction.feePayer = authority.publicKey     // user; -> C'est moi qui paye le frais de transaction. Ca peut etre le user aussi si je veux. 
+    transaction.feePayer = authority.publicKey     // user; -> C'est moi qui paye le frais de transaction. Ca peut etre le user aussi si je veux. //authority.publicKey
 
     // for correct account ordering 
     transaction = Transaction.from(transaction.serialize({
