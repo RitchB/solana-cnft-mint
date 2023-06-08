@@ -9,17 +9,15 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import * as base58 from "base-58";
 import { type } from 'os';
 
-type ErrorData = {
-    error: string
-}
 type GetData = {
     label: string
     icon: string
-  }
-  type PostData = {
+}
+type PostData = {
     transaction: string,
     message?: string
-  }
+}
+
 
 function get(
     req: NextApiRequest,
@@ -45,6 +43,8 @@ async function post(
     console.log("mint requested by " + accountField);
 
     const user = new PublicKey(accountField);
+    console.log('the user is: ', user)
+    console.log('the user is: ', user.toBase58())
 
 
 
@@ -81,7 +81,7 @@ async function post(
         requireAllSignatures: false,
     }));
 
-    transaction.sign(authority); 
+    transaction.sign(authority);
     console.log('the transaction: ', transaction)
 
 
