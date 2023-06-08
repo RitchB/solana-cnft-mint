@@ -40,11 +40,11 @@ async function post(
     let accountField = req.body?.account;
     if (!accountField) throw new Error('missing account');
 
-    console.log("mint requested by " + accountField);
+    //console.log("mint requested by " + accountField);
 
     const user = new PublicKey(accountField);
-    console.log('the user is: ', user)  //PublicKey [PublicKey(c9Mw4mMdXKnzZFZJdGTC5EJa13Shne2mdRAiDhX5GHK)] {_bn: <BN: 900c8323b95ceaca68b113d54a82fdc893c24648ccf370b7acb9049099cecce>}
-    console.log('the user is: ', user.toBase58())   //c9Mw4mMdXKnzZFZJdGTC5EJa13Shne2mdRAiDhX5GHK
+    //console.log('the user is: ', user)  //PublicKey [PublicKey(c9Mw4mMdXKnzZFZJdGTC5EJa13Shne2mdRAiDhX5GHK)] {_bn: <BN: 900c8323b95ceaca68b113d54a82fdc893c24648ccf370b7acb9049099cecce>}
+    //console.log('the user is: ', user.toBase58())   //c9Mw4mMdXKnzZFZJdGTC5EJa13Shne2mdRAiDhX5GHK
 
 
 
@@ -58,17 +58,17 @@ async function post(
     const authoritySecret = JSON.parse(process.env.AUTHORITY_KEY ?? "") as number[]
     const authoritySecretKey = Uint8Array.from(authoritySecret)
     const authority = Keypair.fromSecretKey(authoritySecretKey) //
-    const authorityPublicKey = authority.publicKey  // 
-    console.log('the authority is: ', authority)  // Keypair {_keypair: {publicKey: Uint8Array(32) [195... 150], secretKey: Uint8Array(64) [15,  41, ... 150]}}
-    console.log('the authority.publicKey is: ', authority.publicKey)  // PublicKey [PublicKey(E8aGNJNdoexXAfKTLyvt4HSfpZ1YgeGAgpnQhcXPSGpD)] {_bn: <BN: c3189bc7272634899ebd0aa905f09b159c2e93b72a072834289ee65a9b141196>}
-    console.log('the authorityPublicKey is: ', authorityPublicKey.toBase58())  //  E8aGNJNdoexXAfKTLyvt4HSfpZ1YgeGAgpnQhcXPSGpD
+    //const authorityPublicKey = authority.publicKey  // this works too
+    //console.log('the authority is: ', authority)  // Keypair {_keypair: {publicKey: Uint8Array(32) [195... 150], secretKey: Uint8Array(64) [15,  41, ... 150]}}
+    //console.log('the authority.publicKey is: ', authority.publicKey)  // PublicKey [PublicKey(E8aGNJNdoexXAfKTLyvt4HSfpZ1YgeGAgpnQhcXPSGpD)] {_bn: <BN: c3189bc7272634899ebd0aa905f09b159c2e93b72a072834289ee65a9b141196>}
+    //console.log('the authorityPublicKey is: ', authorityPublicKey.toBase58())  //  E8aGNJNdoexXAfKTLyvt4HSfpZ1YgeGAgpnQhcXPSGpD
 
     const tree = new PublicKey("ERkzt2Zyau5nnSf877FCQNzQRRxW5xaMJEt4DQhYX97T");
 
     const collectionMint = new PublicKey("3XfkDtSZZ586DztsjeVpTV3TLMYHRci2tkwTBoGzFvfz");
 
     // Build Transaction
-    const ix = await createMintCNFTInstruction(tree, collectionMint, user, authority.publicKey); //here
+    const ix = await createMintCNFTInstruction(tree, collectionMint, user, authority.publicKey);
 
     let transaction = new Transaction();
     transaction.add(ix);
@@ -76,7 +76,7 @@ async function post(
     const connection = new Connection('https://api.devnet.solana.com')
     const bh = await connection.getLatestBlockhash();
     transaction.recentBlockhash = bh.blockhash;
-    transaction.feePayer = user     // user; -> C'est moi qui paye le frais de transaction. Ca peut etre le user aussi si je veux. //authority.publicKey
+    transaction.feePayer = authority.publicKey     // user; -> The authority pay for the transaction fee. It could be the variable 'user' also if I want.
 
     // for correct account ordering 
     transaction = Transaction.from(transaction.serialize({
@@ -143,6 +143,11 @@ async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: 
         ],
         TOKEN_METADATA_PROGRAM_ID
     );
+    console.log('the collectionMetadataAccount is: ', collectionMetadataAccount.toBase58())   //
+    console.log('the _b1 is: ', _b1)  //
+    console.log('the TOKEN_METADATA_PROGRAM_ID is: ', TOKEN_METADATA_PROGRAM_ID.toBase58())  //metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s???????
+    console.log('the collectionMint.toBuffer(): ', collectionMint.toBuffer())
+
     const [collectionEditionAccount, _b2] = PublicKey.findProgramAddressSync(
         [
             Buffer.from("metadata", "utf8"),
