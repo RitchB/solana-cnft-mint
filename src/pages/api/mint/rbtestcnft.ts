@@ -59,9 +59,9 @@ async function post(
     const authoritySecretKey = Uint8Array.from(authoritySecret)
     const authority = Keypair.fromSecretKey(authoritySecretKey) //
     const authorityPublicKey = authority.publicKey  // 
-    console.log('the authority is: ', authority)  //
-    console.log('the authority.publicKey is: ', authority.publicKey)  //
-    console.log('the authorityPublicKey is: ', authorityPublicKey.toBase58())  //
+    console.log('the authority is: ', authority)  // Keypair {_keypair: {publicKey: Uint8Array(32) [195... 150], secretKey: Uint8Array(64) [15,  41, ... 150]}}
+    console.log('the authority.publicKey is: ', authority.publicKey)  // PublicKey [PublicKey(E8aGNJNdoexXAfKTLyvt4HSfpZ1YgeGAgpnQhcXPSGpD)] {_bn: <BN: c3189bc7272634899ebd0aa905f09b159c2e93b72a072834289ee65a9b141196>}
+    console.log('the authorityPublicKey is: ', authorityPublicKey.toBase58())  //  E8aGNJNdoexXAfKTLyvt4HSfpZ1YgeGAgpnQhcXPSGpD
 
     const tree = new PublicKey("ERkzt2Zyau5nnSf877FCQNzQRRxW5xaMJEt4DQhYX97T");
 
@@ -76,7 +76,7 @@ async function post(
     const connection = new Connection('https://api.devnet.solana.com')
     const bh = await connection.getLatestBlockhash();
     transaction.recentBlockhash = bh.blockhash;
-    transaction.feePayer = authority.publicKey     // user; -> C'est moi qui paye le frais de transaction. Ca peut etre le user aussi si je veux. //authority.publicKey
+    transaction.feePayer = user     // user; -> C'est moi qui paye le frais de transaction. Ca peut etre le user aussi si je veux. //authority.publicKey
 
     // for correct account ordering 
     transaction = Transaction.from(transaction.serialize({
