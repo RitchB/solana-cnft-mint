@@ -88,7 +88,7 @@ async function post(
     }));
 
     transaction.sign(authority);
-    console.log('the transaction.signature: ', transaction.signatures)
+    //console.log('the transaction.signature: ', transaction.signatures)
 
 
     // Serialize and return the unsigned transaction.
