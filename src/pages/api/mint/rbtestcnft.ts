@@ -79,7 +79,7 @@ async function post(
     const connection = new Connection('https://api.devnet.solana.com')
     const bh = await connection.getLatestBlockhash();
     transaction.recentBlockhash = bh.blockhash;
-    transaction.feePayer = authority.publicKey     // user; -> The authority pay for the transaction fee. It could be the variable 'user' also if I want.
+    transaction.feePayer = user     // user; -> The authority pay for the transaction fee. It could be the variable 'user' also if I want. // authority.publicKey
 
     // for correct account ordering 
     transaction = Transaction.from(transaction.serialize({
@@ -87,8 +87,8 @@ async function post(
         requireAllSignatures: false,
     }));
 
-    transaction.sign(authority, tree);
-    //console.log('the transaction.signature: ', transaction.signatures)
+    transaction.sign(authority);
+    console.log('the transaction.signature: ', transaction.signatures)
 
 
     // Serialize and return the unsigned transaction.
@@ -198,7 +198,7 @@ async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: 
             tokenProgramVersion: TokenProgramVersion.Original
         }
     });
-
+    console.log('tix', tix)
     return tix;
 
 
