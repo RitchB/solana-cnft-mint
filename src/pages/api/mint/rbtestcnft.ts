@@ -87,7 +87,7 @@ async function post(
         requireAllSignatures: false,
     }));
 
-    transaction.signatures = []
+    transaction.sign = []
     transaction.sign(authority);
     console.log('the transaction.signature: ', transaction.signatures)
 
