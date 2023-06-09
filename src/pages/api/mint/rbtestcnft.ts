@@ -87,9 +87,10 @@ async function post(
         requireAllSignatures: false,
     }));
 
-    transaction.signatures = []
-    transaction.sign(authority);
-    console.log('the transaction.signature: ', transaction.signatures)
+    transaction.signatures = []; // Reset the signatures array
+    transaction.sign(authority); // Sign the transaction with the authority signer
+    
+    console.log('the transaction.signature: ', transaction.signatures);
 
 
     // Serialize and return the unsigned transaction.
