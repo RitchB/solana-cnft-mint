@@ -129,7 +129,7 @@ export default async function handler(
 
 
 ////////////////async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: PublicKey, user: PublicKey, authority: PublicKey) {
-async function createMintCNFTInstruction(merkleTree: PublicKey, user: PublicKey, authority: PublicKey) {
+async function createMintCNFTInstruction(merkleTree: PublicKey, user: PublicKey, authority: PublicKey, collectionMint: PublicKey) {
 
     const [treeAuthority, _bump] = PublicKey.findProgramAddressSync(
         [merkleTree.toBuffer()],
