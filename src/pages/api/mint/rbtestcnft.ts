@@ -69,7 +69,7 @@ async function post(
 
     // Build Transaction
 
-    const ix = await createMintCNFTInstruction(tree, user, authority.publicKey);
+    const ix = await createMintCNFTInstruction(tree, user, authority.publicKey, collectionMint);
     ////////////////////const ix = await createMintCNFTInstruction(tree, collectionMint, user, authority.publicKey);
     //console.log('ix.data: ', ix.data)   //<Buffer 99 12 ... 129 more bytes>
     //console.log('ix.keys: ', ix.keys) //nothing seems to be null here
