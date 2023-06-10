@@ -68,7 +68,9 @@ async function post(
     const collectionMint = new PublicKey("3XfkDtSZZ586DztsjeVpTV3TLMYHRci2tkwTBoGzFvfz");
 
     // Build Transaction
-    const ix = await createMintCNFTInstruction(tree, collectionMint, user, authority.publicKey);
+
+    const ix = await createMintCNFTInstruction(tree, user, authority.publicKey, collectionMint);
+    ////////////////////const ix = await createMintCNFTInstruction(tree, collectionMint, user, authority.publicKey);
     //console.log('ix.data: ', ix.data)   //<Buffer 99 12 ... 129 more bytes>
     //console.log('ix.keys: ', ix.keys) //nothing seems to be null here
     //console.log('ix.programId: ', ix.programId) //PublicKey [PublicKey(BGUMAp9Gq7iTEuizy4pqaxsTyUCBK68MDfK752saRPUY)] {_bn: <BN: 988b80eb79352869b224745f59ddbf8a2658ca13dc68812126351cae07c1a5a5>}
@@ -87,9 +89,8 @@ async function post(
         requireAllSignatures: false,
     }));
 
-    transaction.signatures = null; // Reset the signatures array
     transaction.sign(authority); // Sign the transaction with the authority signer
-    
+
     console.log('the transaction.signature: ', transaction.signatures);
 
 
@@ -127,7 +128,8 @@ export default async function handler(
 
 
 
-async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: PublicKey, user: PublicKey, authority: PublicKey) {
+////////////////async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: PublicKey, user: PublicKey, authority: PublicKey) {
+async function createMintCNFTInstruction(merkleTree: PublicKey, user: PublicKey, authority: PublicKey, collectionMint: PublicKey) {
 
     const [treeAuthority, _bump] = PublicKey.findProgramAddressSync(
         [merkleTree.toBuffer()],
