@@ -63,7 +63,7 @@ async function post(
     //console.log('the authority.publicKey is: ', authority.publicKey)  // PublicKey [PublicKey(E8aGNJNdoexXAfKTLyvt4HSfpZ1YgeGAgpnQhcXPSGpD)] {_bn: <BN: c3189bc7272634899ebd0aa905f09b159c2e93b72a072834289ee65a9b141196>}
     //console.log('the authorityPublicKey is: ', authorityPublicKey.toBase58())  //  E8aGNJNdoexXAfKTLyvt4HSfpZ1YgeGAgpnQhcXPSGpD
 
-    const tree = new PublicKey("BYcDWRYDZsCQeU9Ew82PG5Gnkxkq2b9N8GWeorN5gdeU");
+    const tree = new PublicKey("7DvCv53peihpqtbDLV8uhVRtmeY3of9pNRpBGXoEWSqn");
 
     const collectionMint = new PublicKey("3XfkDtSZZ586DztsjeVpTV3TLMYHRci2tkwTBoGzFvfz");
 
