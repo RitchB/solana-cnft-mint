@@ -199,7 +199,7 @@ async function createMintCNFTInstruction(merkleTree: PublicKey, user: PublicKey,
             uses: null,
             tokenStandard: TokenStandard.NonFungible,
             editionNonce: null,
-            tokenProgramVersion: TokenProgramVersion.Original
+            tokenProgramVersion: TokenProgramVersion.Original,
         }
     });
     console.log('tix', tix)
