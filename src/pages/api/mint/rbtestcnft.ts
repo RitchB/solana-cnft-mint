@@ -81,7 +81,7 @@ async function post(
     const connection = new Connection('https://api.devnet.solana.com')
     const bh = await connection.getLatestBlockhash();
     transaction.recentBlockhash = bh.blockhash;
-    transaction.feePayer = user     // user; -> The authority pay for the transaction fee. It could be the variable 'user' also if I want. // authority.publicKey
+    transaction.feePayer = authority.publicKey     // user; -> The authority pay for the transaction fee. It could be the variable 'user' also if I want. // authority.publicKey
 
     // for correct account ordering 
     transaction = Transaction.from(transaction.serialize({
