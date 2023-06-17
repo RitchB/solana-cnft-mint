@@ -139,10 +139,10 @@ async function createMintCNFTInstruction(merkleTree: PublicKey, user: PublicKey,
 
 
 
-    const [treeAuthority, _bump] = PublicKey.findProgramAddressSync(
-        [merkleTree.toBuffer()],
-        BUBBLEGUM_PROGRAM_ID,
-    );
+    const treeAuthority = new PublicKey("E8aGNJNdoexXAfKTLyvt4HSfpZ1YgeGAgpnQhcXPSGpD")
+    const _bump = 255
+    //ici
+
 
     console.log('the treeAuthority is: ', treeAuthority.toBase58())//BYcDWRYDZsCQeU9Ew82PG5Gnkxkq2b9N8GWeorN5gdeU
     //console.log('the _bump is: ', _bump)    //255
