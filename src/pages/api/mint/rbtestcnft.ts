@@ -211,6 +211,7 @@ async function createMintCNFTInstruction(merkleTree: PublicKey, user: PublicKey,
         }
     });
     console.log('tix', tix)
+    console.log('yolo')
     return tix;
 
 
