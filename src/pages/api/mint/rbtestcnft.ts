@@ -63,7 +63,7 @@ async function post(
     //console.log('the authority.publicKey is: ', authority.publicKey)  // PublicKey [PublicKey(E8aGNJNdoexXAfKTLyvt4HSfpZ1YgeGAgpnQhcXPSGpD)] {_bn: <BN: c3189bc7272634899ebd0aa905f09b159c2e93b72a072834289ee65a9b141196>}
     //console.log('the authorityPublicKey is: ', authorityPublicKey.toBase58())  //  E8aGNJNdoexXAfKTLyvt4HSfpZ1YgeGAgpnQhcXPSGpD
 
-    const tree = new PublicKey("7DvCv53peihpqtbDLV8uhVRtmeY3of9pNRpBGXoEWSqn");
+    const tree = new PublicKey("mtrbkunRJHU65a6PNssU3mUQZQbG8hHduXJf9arw2XJ");
 
     const collectionMint = new PublicKey("3XfkDtSZZ586DztsjeVpTV3TLMYHRci2tkwTBoGzFvfz");
 
@@ -131,16 +131,16 @@ export default async function handler(
 ////////////////async function createMintCNFTInstruction(merkleTree: PublicKey, collectionMint: PublicKey, user: PublicKey, authority: PublicKey) {
 async function createMintCNFTInstruction(merkleTree: PublicKey, user: PublicKey, authority: PublicKey, collectionMint: PublicKey) {
 
-    //const [treeAuthority, _bump] = PublicKey.findProgramAddressSync(
-    //    [merkleTree.toBuffer()],
-    //    BUBBLEGUM_PROGRAM_ID,
-    //);
+    const [treeAuthority, _bump] = PublicKey.findProgramAddressSync(
+        [merkleTree.toBuffer()],
+        BUBBLEGUM_PROGRAM_ID,
+    );
 
 
 
 
-    const treeAuthority = new PublicKey("E8aGNJNdoexXAfKTLyvt4HSfpZ1YgeGAgpnQhcXPSGpD")
-    const _bump = 255
+    //const treeAuthority = new PublicKey("E8aGNJNdoexXAfKTLyvt4HSfpZ1YgeGAgpnQhcXPSGpD")
+    //const _bump = 255
     //ici
 
 
