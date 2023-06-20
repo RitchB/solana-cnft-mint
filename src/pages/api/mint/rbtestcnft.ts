@@ -65,8 +65,9 @@ async function post(
 
     const tree = new PublicKey("mtrbkunRJHU65a6PNssU3mUQZQbG8hHduXJf9arw2XJ");
 
-    const collectionMint = new PublicKey("3XfkDtSZZ586DztsjeVpTV3TLMYHRci2tkwTBoGzFvfz");
-
+    //const collectionMint = new PublicKey("3XfkDtSZZ586DztsjeVpTV3TLMYHRci2tkwTBoGzFvfz");
+    const collectionMint = new PublicKey("EXX3Cg6zHFHuLKTEZd5DS1wvYgaJVpm6qEeuHPHLNhjJ")
+    
     // Build Transaction
 
     const ix = await createMintCNFTInstruction(tree, user, authority.publicKey, collectionMint);
